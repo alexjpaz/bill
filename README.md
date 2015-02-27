@@ -4,7 +4,7 @@ _Continuous deployment production environments, built on Docker, CoreOS, etcd an
 
 Bill is a pluggable in-house service platform with a PaaS-like workflow.
 
-![Screenshot](https://raw.githubusercontent.com/yldio/bill/206283f9f2b0c21bc4abf3a1f3926bd5e0f0a962/docs/images/Screen%20Shot%202014-11-22%20at%2016.39.07.png)
+![Screenshot](https://raw.githubusercontent.com/alexjpaz/bill/master/docs/images/more-awesomer-screenshot.png)
 
 ## Features
 * Beautiful web UI

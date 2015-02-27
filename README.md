@@ -1,10 +1,10 @@
-Paz
+Bill
 ===
 _Continuous deployment production environments, built on Docker, CoreOS, etcd and fleet._
 
-Paz is a pluggable in-house service platform with a PaaS-like workflow.
+Bill is a pluggable in-house service platform with a PaaS-like workflow.
 
-![Screenshot](https://raw.githubusercontent.com/yldio/paz/206283f9f2b0c21bc4abf3a1f3926bd5e0f0a962/docs/images/Screen%20Shot%202014-11-22%20at%2016.39.07.png)
+![Screenshot](https://raw.githubusercontent.com/yldio/bill/206283f9f2b0c21bc4abf3a1f3926bd5e0f0a962/docs/images/Screen%20Shot%202014-11-22%20at%2016.39.07.png)
 
 ## Features
 * Beautiful web UI
@@ -43,7 +43,7 @@ Currently cAdvisor is used for monitoring, and there is no centralised logging. 
 
 ## Installation
 
-Paz's Docker repositories are hosted at Quay.io, but they are public so you don't need any credentials.
+Bill's Docker repositories are hosted at Quay.io, but they are public so you don't need any credentials.
 
 You will need to install `fleetctl` and `etcdctl`. On OS/X you can install both with brew:
 ```
@@ -58,7 +58,7 @@ Clone this repository and run the following from the root directory of this repo
 $ ./scripts/install-vagrant.sh
 ```
 
-This will bring up a three-node CoreOS Vagrant cluster and install Paz on it. Note that it may take 10 minutes or more to complete.
+This will bring up a three-node CoreOS Vagrant cluster and install Bill on it. Note that it may take 10 minutes or more to complete.
 
 For extra debug output, run with `DEBUG=1` environment variable set.
 
@@ -85,24 +85,24 @@ $ vagrant ssh core-01
 
 ### DigitalOcean
 
-Paz has been tested on Digital Ocean but there isn't currently an install script for it. It shouldn't take much, just be sure to edit the PAZ_DNSIMPLE_* values in `digitalocean/user-data`. Stay tuned...
+Bill has been tested on Digital Ocean but there isn't currently an install script for it. It shouldn't take much, just be sure to edit the BILL_DNSIMPLE_* values in `digitalocean/user-data`. Stay tuned...
 
 ## Tests
 
-There is an integration test that brings up a CoreOS Vagrant cluster, installs Paz and then runs a contrived service on it and verifies that it works:
+There is an integration test that brings up a CoreOS Vagrant cluster, installs Bill and then runs a contrived service on it and verifies that it works:
 
 ```
 $ cd test
 $ ./integration.sh
 ```
 
-Each paz repository (service directory, orchestrator, scheduler) has tests that run on paz-ci.yld.io (in StriderCD), triggered by a Github webhook.
+Each bill repository (service directory, orchestrator, scheduler) has tests that run on bill-ci.yld.io (in StriderCD), triggered by a Github webhook.
 
-## Paz Repositories
+## Bill Repositories
 
-The various components of Paz are spread across several repositories:
-* [Orchestrator](https://github.com/yldio/paz-orchestrator)
-* [Service Directory](https://github.com/yldio/paz-service-directory)
-* [Scheduler](https://github.com/yldio/paz-scheduler)
-* [Web](https://github.com/yldio/paz-web)
-* [HAProxy](https://github.com/yldio/paz-haproxy)
+The various components of Bill are spread across several repositories:
+* [Orchestrator](https://github.com/yldio/bill-orchestrator)
+* [Service Directory](https://github.com/yldio/bill-service-directory)
+* [Scheduler](https://github.com/yldio/bill-scheduler)
+* [Web](https://github.com/yldio/bill-web)
+* [HAProxy](https://github.com/yldio/bill-haproxy)

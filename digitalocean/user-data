@@ -79,12 +79,12 @@ coreos:
 
         [Install]
         WantedBy=local.target
-    - name: paz-dnsmasq.service
+    - name: bill-dnsmasq.service
       runtime: true
       command: start
       content: |
         [Unit]
-        Description=*.paz traffic will go to the private_ipv4 addr
+        Description=*.bill traffic will go to the private_ipv4 addr
         After=docker.service
         Requires=docker.service
 
@@ -96,14 +96,14 @@ coreos:
 
         [Service]
         Restart=always
-        ExecStart=/usr/bin/docker run -p $private_ipv4:53:53/udp --privileged --name=paz-dnsmasq tomgco/dnsmasq-catch paz $private_ipv4
+        ExecStart=/usr/bin/docker run -p $private_ipv4:53:53/udp --privileged --name=bill-dnsmasq tomgco/dnsmasq-catch bill $private_ipv4
         ExecStop=/usr/bin/docker stop -t 2 tomgco/dnsmasq-catch
-    - name: paz-haproxy.service
+    - name: bill-haproxy.service
       runtime: true
       command: start
       content: |
         [Unit]
-        Description=paz HAProxy instance that enables service discovery.
+        Description=bill HAProxy instance that enables service discovery.
         After=docker.service
         Requires=docker.service
 
@@ -116,12 +116,12 @@ coreos:
         User=core
         Restart=always
         RestartSec=5s
-        ExecStartPre=/usr/bin/docker pull quay.io/yldio/paz-haproxy:latest
-        ExecStartPre=-/bin/bash -c "docker inspect paz-haproxy >/dev/null 2>&1 && docker rm -f paz-haproxy || true"
-        ExecStart=/usr/bin/docker run -p 80:80 -p 1936:1936 -e ETCD=$private_ipv4:4001 --name paz-haproxy quay.io/yldio/paz-haproxy
-        ExecStop=/usr/bin/docker rm -f paz-haproxy
+        ExecStartPre=/usr/bin/docker pull quay.io/yldio/bill-haproxy:latest
+        ExecStartPre=-/bin/bash -c "docker inspect bill-haproxy >/dev/null 2>&1 && docker rm -f bill-haproxy || true"
+        ExecStart=/usr/bin/docker run -p 80:80 -p 1936:1936 -e ETCD=$private_ipv4:4001 --name bill-haproxy quay.io/yldio/bill-haproxy
+        ExecStop=/usr/bin/docker rm -f bill-haproxy
         TimeoutStartSec=20m
-    - name: paz-pubkey-watcher.service
+    - name: bill-pubkey-watcher.service
       runtime: true
       command: start
       content: |
@@ -136,34 +136,34 @@ coreos:
         [Service]
         User=core
         Restart=always
-        ExecStartPre=/home/core/bin/paz-pubkey-watcher.sh once
-        ExecStart=/home/core/bin/paz-pubkey-watcher.sh
+        ExecStartPre=/home/core/bin/bill-pubkey-watcher.sh once
+        ExecStart=/home/core/bin/bill-pubkey-watcher.sh
 
 write_files:
   - path: /home/core/.dockercfg
     content: |
         {"__DOCKER_REGISTRY__":{"auth":"__DOCKER_AUTH__","email":"__DOCKER_EMAIL__"}}
-  - path: /etc/paz-environment
+  - path: /etc/bill-environment
     permissions: 0644
     content: |
-        PAZ_PLATFORM=digitalocean
-        PAZ_DOMAIN=lukeb0nd.com
-        PAZ_DNSIMPLE_APIKEY=
-        PAZ_DNSIMPLE_EMAIL=
-  - path: /home/core/bin/paz-pubkey-watcher.sh
+        BILL_PLATFORM=digitalocean
+        BILL_DOMAIN=lukeb0nd.com
+        BILL_DNSIMPLE_APIKEY=
+        BILL_DNSIMPLE_EMAIL=
+  - path: /home/core/bin/bill-pubkey-watcher.sh
     owner: core
     permissions: 0754
     content: |
         #!/bin/bash
         set -e
         if [[ "$1" == "once" ]]; then
-          FN=`mktemp /tmp/paz-pubkey.XXXX`
-          until etcdctl get /paz/config/scheduler/_pubkey 2>/dev/null > $FN.tmp; do sleep 2; done && base64 -d < $FN.tmp > $FN && /usr/bin/update-ssh-keys -u core -a paz-scheduler $FN
+          FN=`mktemp /tmp/bill-pubkey.XXXX`
+          until etcdctl get /bill/config/scheduler/_pubkey 2>/dev/null > $FN.tmp; do sleep 2; done && base64 -d < $FN.tmp > $FN && /usr/bin/update-ssh-keys -u core -a bill-scheduler $FN
           rm $FN $FN.tmp
         else
           while :; do
-            FN=`mktemp /tmp/paz-pubkey.XXXX`
-            etcdctl watch /paz/config/scheduler/_pubkey | base64 -d > $FN && /usr/bin/update-ssh-keys -u core -a paz-scheduler $FN;
+            FN=`mktemp /tmp/bill-pubkey.XXXX`
+            etcdctl watch /bill/config/scheduler/_pubkey | base64 -d > $FN && /usr/bin/update-ssh-keys -u core -a bill-scheduler $FN;
             rm $FN
           done;
         fi

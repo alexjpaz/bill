@@ -1,6 +1,6 @@
 # Contributing
 
-Paz is a YLD project and the copyright (except where documented) is held by YLD.
+Bill is a YLD project and the copyright (except where documented) is held by YLD.
 
 ## Submitting a Pull Request
 
